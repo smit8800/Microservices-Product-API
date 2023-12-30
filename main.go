@@ -19,6 +19,14 @@ func main() {
 		fmt.Fprintf(w, "Hello  %s ", d)
 	})
 
+	http.HandleFunc("/form", func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, "./static/form.html")
+	})
+
+	http.HandleFunc("/form_pressed", func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, "./static/welcome.html")
+	})
+
 	http.HandleFunc("/goodbye", func(w http.ResponseWriter, r *http.Request) {
 		log.Println("GoodBye Wold!")
 	})
