@@ -12,9 +12,11 @@ func main() {
 	hh := handlers.NewHello(l)
 	gg := handlers.NewGoodbye(l)
 
-	ss := http.NewServeMux()
-	ss.Handle("/", hh)
-	ss.Handle("/goodbye", gg)
+	sm := http.NewServeMux()
+	sm.Handle("/", hh)
+	sm.Handle("/goodbye", gg)
 
-	http.ListenAndServe("127.0.0.1:8000", ss)
+	server :=
+
+		http.ListenAndServe("127.0.0.1:8000", sm)
 }
