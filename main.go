@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"os"
 	"project/handlers"
+	"time"
 )
 
 func main() {
@@ -16,7 +17,13 @@ func main() {
 	sm.Handle("/", hh)
 	sm.Handle("/goodbye", gg)
 
-	server :=
+	s := &http.Server{
+		Addr:         ":8000",
+		Handler:      sm,
+		IdleTimeout:  120 * time.Second,
+		ReadTimeout:  1 * time.Second,
+		WriteTimeout: 1 * time.Second,
+	}
 
-		http.ListenAndServe("127.0.0.1:8000", sm)
+	s.ListenAndServe()
 }
