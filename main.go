@@ -27,30 +27,21 @@ func main() {
 		WriteTimeout: 1 * time.Second,
 	}
 
-	// Start the HTTP server in a new goroutine to run concurrently.
 	go func() {
-		// Start listening for incoming HTTP requests.
 		err := s.ListenAndServe()
 		if err != nil {
 			l.Fatal(err)
 		}
 	}()
 
-	// Create a channel to receive OS signals like interrupts or termination signals.
 	sigChan := make(chan os.Signal)
-
-	// Notify the sigChan channel when the program receives the OS interrupt signal or the OS kill.
 	signal.Notify(sigChan, os.Interrupt)
 	signal.Notify(sigChan, os.Kill)
 
-	// Block the program until a signal is received on the sigChan channel.
-	// Log a message indicating that a signal was received and specify which signal was received.
+	// blocks until sigChan recieves some data from os
 	sig := <-sigChan
-	l.Println("received terminate, graceful shutdown", sig)
+	l.Println("recieved terminate, graceful shutdown", sig)
 
-	// Create a context with a 30-second timeout for the server shutdown operation.
-	// Gracefully shut down the HTTP server using the created context.
 	tc, _ := context.WithTimeout(context.Background(), 30*time.Second)
 	s.Shutdown(tc)
-
 }
