@@ -17,17 +17,6 @@ type Product struct {
 	DeletedOn   string  `json:"-"`
 }
 
-type Products []*Product
-
-func (p *Products) ToJSON(w io.Writer) error {
-	e := json.NewEncoder(w)
-	return e.Encode(p)
-}
-
-func GetProducts() Products {
-	return productList
-}
-
 // productList is a hard coded list of products for this
 // example data source
 var productList = []*Product{
@@ -49,4 +38,15 @@ var productList = []*Product{
 		CreatedOn:   time.Now().UTC().String(),
 		UpdatedOn:   time.Now().UTC().String(),
 	},
+}
+
+type Products []*Product
+
+func (p *Products) ToJSON(w io.Writer) error {
+	e := json.NewEncoder(w)
+	return e.Encode(p)
+}
+
+func GetProducts() Products {
+	return productList
 }
