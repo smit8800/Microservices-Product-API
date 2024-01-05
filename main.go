@@ -12,12 +12,10 @@ import (
 
 func main() {
 	l := log.New(os.Stdout, "product-api", log.LstdFlags)
-	hh := handlers.NewHello(l)
-	gg := handlers.NewGoodbye(l)
+	ph := handlers.NewProducts(l)
 
 	sm := http.NewServeMux()
-	sm.Handle("/", hh)
-	sm.Handle("/goodbye", gg)
+	sm.Handle("/", ph)
 
 	s := &http.Server{
 		Addr:         ":8000",
@@ -35,6 +33,8 @@ func main() {
 	}()
 
 	sigChan := make(chan os.Signal)
+
+	// sending os.Interrupt or os.Kill on Chennal
 	signal.Notify(sigChan, os.Interrupt)
 	signal.Notify(sigChan, os.Kill)
 
