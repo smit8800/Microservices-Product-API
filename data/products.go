@@ -46,15 +46,15 @@ var productList = []*Product{
 	},
 }
 
+func GetProducts() Products {
+	return productList
+}
+
 type Products []*Product
 
 func (p *Products) ToJSON(w io.Writer) error {
 	e := json.NewEncoder(w)
 	return e.Encode(p)
-}
-
-func GetProducts() Products {
-	return productList
 }
 
 func AddProduct(p *Product) {
@@ -70,6 +70,7 @@ func UpdateProduct(id int, p *Product) error {
 		return err
 	}
 	p.ID = id
+	p.UpdatedOn = time.Now().UTC().String()
 	productList[pos] = p
 	return nil
 }
