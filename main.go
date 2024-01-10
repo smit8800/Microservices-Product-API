@@ -46,6 +46,7 @@ func main() {
 	}
 
 	go func() {
+		l.Println("Server running at localhost:", 8000)
 		err := s.ListenAndServe()
 		if err != nil {
 			l.Fatal(err)
