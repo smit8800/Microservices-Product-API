@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"context"
-	"fmt"
 	"net/http"
 	"project/data"
 )
@@ -21,7 +20,6 @@ func (p *Products) MiddlewareValidateProduct(next http.Handler) http.Handler {
 			return
 		}
 
-
 		// validate the product
 		errs := prod.Validate()
 		if errs != nil {
@@ -33,7 +31,6 @@ func (p *Products) MiddlewareValidateProduct(next http.Handler) http.Handler {
 			return
 		}
 
-		fmt.Print("After Validation -----------------------------------> ", prod)
 		// add the product to the context
 		ctx := context.WithValue(r.Context(), KeyProduct{}, prod)
 		r = r.WithContext(ctx)
