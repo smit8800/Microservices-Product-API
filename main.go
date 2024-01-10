@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"project/data"
 	"project/handlers"
 	"time"
 
@@ -14,21 +15,27 @@ import (
 
 func main() {
 	l := log.New(os.Stdout, "product-api", log.LstdFlags)
-	ph := handlers.NewProducts(l)
+	v := data.NewValidation()
+
+	ph := handlers.NewProducts(l, v)
 
 	// create a new serve mux and register the handlers
 	sm := mux.NewRouter()
 
-	getRouter := sm.Methods(http.MethodGet).Subrouter()
-	getRouter.HandleFunc("/", ph.GetProducts)
+	getR := sm.Methods(http.MethodGet).Subrouter()
+	getR.HandleFunc("/products", ph.ListAll)
+	getR.HandleFunc("/products/{id:[0-9]+}", ph.ListSingle)
 
-	postRouter := sm.Methods(http.MethodPost).Subrouter()
-	postRouter.HandleFunc("/", ph.AddProduct)
-	postRouter.Use(ph.MiddlewareValidateProduct)
+	putR := sm.Methods(http.MethodPut).Subrouter()
+	putR.HandleFunc("/products", ph.Update)
+	putR.Use(ph.MiddlewareValidateProduct)
 
-	putRouter := sm.Methods(http.MethodPut).Subrouter()
-	putRouter.HandleFunc("/{id:[0-9]+}", ph.UpdateProducts)
-	putRouter.Use(ph.MiddlewareValidateProduct)
+	postR := sm.Methods(http.MethodPost).Subrouter()
+	postR.HandleFunc("/products", ph.Create)
+	postR.Use(ph.MiddlewareValidateProduct)
+
+	deleteR := sm.Methods(http.MethodDelete).Subrouter()
+	deleteR.HandleFunc("/products/{id:[0-9]+}", ph.Delete)
 
 	s := &http.Server{
 		Addr:         ":8000",
